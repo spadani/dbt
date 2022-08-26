@@ -1,34 +1,25 @@
 version: 2
 
 models:
-  - name: customers
-    description: One record per customer
-    columns:
-      - name: customer_id
-        description: Primary key
-        tests:
-          - unique
-          - not_null
-      - name: first_order_date
-        description: NULL when a customer has not yet placed an order.
-
   - name: stg_customers
-    description: This model cleans up customer data
-    columns:
+    description: Staged customer data from our jaffle shop app.
+    columns: 
       - name: customer_id
-        description: Primary key
+        description: The primary key for customers.
         tests:
           - unique
           - not_null
 
   - name: stg_orders
-    description: This model cleans up order data
+    description: Staged order data from our jaffle shop app.
     columns: 
       - name: order_id
+        description: Primary key for orders.
         tests:
           - unique
           - not_null
       - name: status
+        description: "{{ doc('order_status') }}"
         tests:
           - accepted_values:
               values:
@@ -38,6 +29,7 @@ models:
                 - placed
                 - return_pending
       - name: customer_id
+        description: Foreign key to stg_customers.customer_id.
         tests:
           - relationships:
               to: ref('stg_customers')
